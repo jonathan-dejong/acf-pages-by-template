@@ -27,8 +27,7 @@ Installation
 	}
 </code>
 
-Frequently Asked Questions
+To do
 --------
-<h5>I've activated the plugin, but nothing happens!</h5>
-
-Make sure you have Advanced Custom Fields installed and activated. This is not a standalone plugin for WordPress, it only adds additional functionality to Advanced Custom Fields.
+* Create an option to choose all pages
+* Create an option to choose the default template
