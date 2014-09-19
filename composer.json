@@ -1,0 +1,20 @@
+{
+  "name": "jonathan-dejong/acf-pages-by-template",
+  "description": "Advanced Custom Fields - Pages by Template add-on",
+  "authors": [
+    {
+      "name": "Jonathan de Jong",
+      "email": "jonathan@tigerton.se"
+    },
+    {
+      "name": "Xavier Priour",
+      "email": "xavier.priour@bubblyware.com"
+    }
+  ],
+  "require": {
+
+  },
+  "autoload": {
+    "files": ["acf_page_per_template.php"]
+  }
+}
