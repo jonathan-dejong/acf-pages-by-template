@@ -1,6 +1,7 @@
 {
   "name": "jonathan-dejong/acf-pages-by-template",
   "description": "Advanced Custom Fields - Pages by Template add-on",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "Jonathan de Jong",
