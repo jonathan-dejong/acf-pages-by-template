@@ -1,6 +1,6 @@
 {
   "name": "jonathan-dejong/acf-pages-by-template",
-  "description": "Advanced Custom Fields - Pages by Template add-on",
+  "description": "Advanced Custom Fields - Pages by Template add-on. Adds a field to select a page, filtered on pages of a specific template.",
   "license": "GPL-2.0+",
   "version": "1.0.0",
   "authors": [
@@ -13,10 +13,7 @@
       "email": "xavier.priour@bubblyware.com"
     }
   ],
+  "type": "wordpress-plugin",
   "require": {
-
-  },
-  "autoload": {
-    "files": ["acf_page_per_template.php"]
   }
 }
