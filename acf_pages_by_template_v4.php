@@ -123,10 +123,83 @@ class acf_field_acf_pages_by_template extends acf_field {
   
   function create_field( $field )
   {
-    // defaults?
-    /*
     $field = array_merge($this->defaults, $field);
-    */
+    // vars
+    $args = array(
+      'numberposts' => -1,
+      'post_type' => 'page',
+      'orderby' => 'title',
+      'order' => 'ASC',
+      'post_status' => array('publish', 'private', 'draft', 'inherit', 'future'),
+      'suppress_filters' => false,
+      'meta_key' => '_wp_page_template',
+      'meta_value' => ''
+    );
+    
+    // ??
+    // load all page templates by default
+    if( !$field['meta_value'] || !is_array($field['meta_value']) || $field['meta_value'][0] == "" )
+    {
+      global $wpdb;
+      $field['meta_value'] = get_page_templates();
+    }
+
+    if($field['page_template']){
+      foreach($field['page_template'] as $page_template )
+      {
+        // set page_templates
+        $args['meta_value'] = $page_template;
+        //set order
+        $args['sort_column'] = 'menu_order, post_title';
+        $args['sort_order'] = 'ASC';
+        //get the pages
+        $posts = get_pages( $args );
+
+        if($posts)
+        {
+          foreach( $posts as $post )
+          {
+            // find title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
+            $title = '';
+            $ancestors = get_ancestors( $post->ID, $post->post_type );
+            if($ancestors)
+            {
+              foreach($ancestors as $a)
+              {
+                $title .= '–';
+              }
+            }
+            $title .= ' ' . apply_filters( 'the_title', $post->post_title, $post->ID );
+            
+            
+            // status
+            if($post->post_status != "publish")
+            {
+              $title .= " ($post->post_status)";
+            }
+            
+            // WPML
+            if( defined('ICL_LANGUAGE_CODE') )
+            {
+              $title .= ' (' . ICL_LANGUAGE_CODE . ')';
+            }
+            
+            // add to choices
+            $field['choices'][ $post->ID ] = $title;
+            
+          }
+          // foreach( $posts as $post )
+        }
+        // if($posts)
+      }
+      // foreach( $field['page_template'] as $page_template )
+    }
+    //if page_template
+    
+    
+    // create field
+    // $this->parent->create_field( $field );
+
     
     // perhaps use $field['preview_size'] to alter the markup?
     
@@ -134,7 +207,18 @@ class acf_field_acf_pages_by_template extends acf_field {
     // create Field HTML
     ?>
     <div>
-      
+        <?php 
+        do_action('acf/create_field', array(
+          'type' => 'select',
+          'name' => 'fields['.$key.'][multiple]',
+          'value' => $field['multiple'],
+          'choices' => array(
+            '1' => __("Yes",'acf'),
+            '0' => __("No",'acf'),
+          ),
+          'layout' => 'horizontal',
+        ));
+        ?>
     </div>
     <?php
   }
