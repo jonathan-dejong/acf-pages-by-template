@@ -1,15 +1,3 @@
-* `AUTHOR_URL`: URL to author's website
-
-### step 2.
-
-Edit the `acf_pages_by_template-v5.php` and `acf_pages_by_template-v4.php` files (now renamed using your field name) and include your custom code in the appropriate functions. 
-Please note that v4 and v5 field classes have slightly different functions. For more information, please read:
-* http://www.advancedcustomfields.com/resources/tutorials/creating-a-new-field-type/
-
-### step 3.
-
-Edit this `README.md` file with the appropriate information and delete all content above and including the following line.
-
 -----------------------
 
 # ACF Pages by template Field

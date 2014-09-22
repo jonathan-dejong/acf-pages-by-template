@@ -20,7 +20,6 @@ The return value is one or more post objects. Display these in the same way you 
 = Compatibility =
 
 This ACF field type is compatible with:
-* ACF 5
 * ACF 4
 
 == Installation ==
@@ -31,6 +30,10 @@ This ACF field type is compatible with:
 4. Please refer to the description for more info regarding the field type settings
 
 == Changelog ==
+
+= 2.0.0 =
+* Works with ACF 4
+* compatible with Composer
 
 = 1.0.0 =
 * Initial Release.
