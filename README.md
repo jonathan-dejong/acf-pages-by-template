@@ -29,12 +29,11 @@ The return value is one or more post objects. Display these in the same way you 
 ### Compatibility
 
 This ACF field type is compatible with:
-* ACF 5
 * ACF 4
 
 ### Installation
 
-1. Copy the `acf-acf_pages_by_template` folder into your `wp-content/plugins` folder
+1. Copy the `acf-pages-by-template` folder into your `wp-content/plugins` folder
 2. Activate the Pages by template plugin via the plugins admin page
 3. Create a new field via ACF and select the Pages by template type
 4. Please refer to the description for more info regarding the field type settings
