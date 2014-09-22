@@ -1,10 +1,8 @@
 <?php
 class acf_field_acf_pages_by_template extends acf_field {
-  
   // vars
   var $settings, // will hold info such as dir / path
     $defaults; // will hold default field options
-    
     
   /*
   *  __construct
@@ -14,16 +12,15 @@ class acf_field_acf_pages_by_template extends acf_field {
   *  @since 3.6
   *  @date  23/01/13
   */
-  
-  function __construct()
-  {
+  function __construct() {
     // vars
     $this->name = 'acf_pages_by_template';
-    $this->label = __('Page Object (by template)');
+    $this->label = __('Page Object (by template)', 'acf');
     $this->category = __("Relational",'acf'); // Basic, Content, Choice, etc
     $this->defaults = array(
-      'page_template' => '',
-      'multiple' => '0'
+      'page_template' => array('all'),
+      'multiple' => 0,
+      'allow_null' => 0,
     );
     // do not delete!
     parent::__construct();
@@ -34,7 +31,6 @@ class acf_field_acf_pages_by_template extends acf_field {
       'version' => '1.0.0'
     );
   }
-  
   
   /*
   *  create_options()
@@ -48,12 +44,9 @@ class acf_field_acf_pages_by_template extends acf_field {
   *
   *  @param $field  - an array holding all the field's data
   */
-  
-  function create_options( $field )
-  {
+  function create_options( $field ) {
     // defaults?
     $field = array_merge($this->defaults, $field);
-    
     // key is needed in the field names to correctly save the data
     $key = $field['name'];
 
@@ -65,14 +58,11 @@ class acf_field_acf_pages_by_template extends acf_field {
       </td>
       <td>
         <?php 
-        
         global $wpdb;
         $page_templates = get_page_templates();
-        foreach( $page_templates as $page_template_name => $page_template )
-        {
+        foreach( $page_templates as $page_template_name => $page_template ) {
           $choices[$page_template] = $page_template_name;
         }
-        
         do_action('acf/create_field', array(
           'type' => 'select',
           'name' => 'fields['.$key.'][page_template]',
@@ -80,7 +70,6 @@ class acf_field_acf_pages_by_template extends acf_field {
           'choices' => $choices,
           'multiple' => '1',
         ));
-        
         ?>
       </td>
     </tr>
@@ -105,9 +94,7 @@ class acf_field_acf_pages_by_template extends acf_field {
       </td>
     </tr>
     <?php
-    
   }
-  
   
   /*
   *  create_field()
@@ -120,9 +107,7 @@ class acf_field_acf_pages_by_template extends acf_field {
   *  @since 3.6
   *  @date  23/01/13
   */
-  
-  function create_field( $field )
-  {
+  function create_field( $field ) {
     $field = array_merge($this->defaults, $field);
     // vars
     $args = array(
@@ -131,96 +116,67 @@ class acf_field_acf_pages_by_template extends acf_field {
       'orderby' => 'title',
       'order' => 'ASC',
       'post_status' => array('publish', 'private', 'draft', 'inherit', 'future'),
+      'sort_column' => 'menu_order, post_title',
+      'sort_order' => 'ASC',
       'suppress_filters' => false,
       'meta_key' => '_wp_page_template',
       'meta_value' => ''
     );
-    
-    // ??
-    // load all page templates by default
-    if( !$field['meta_value'] || !is_array($field['meta_value']) || $field['meta_value'][0] == "" )
-    {
-      global $wpdb;
-      $field['meta_value'] = get_page_templates();
+
+    // // ??
+    // // load all page templates by default
+    // if( !$field['meta_value'] || !is_array($field['meta_value']) || $field['meta_value'][0] == "" )
+    // {
+    //   global $wpdb;
+    //   $field['meta_value'] = get_page_templates();
+    // }
+
+    // build choices
+    if(! $field['page_template']){
+      // todo: load with all templates
+      
+    }
+    $template_name_by_file = array();
+    $page_templates = get_page_templates();
+    foreach( $page_templates as $template_name => $template_file ) {
+      $template_name_by_file[$template_file] = $template_name;
     }
 
-    if($field['page_template']){
-      foreach($field['page_template'] as $page_template )
-      {
-        // set page_templates
-        $args['meta_value'] = $page_template;
-        //set order
-        $args['sort_column'] = 'menu_order, post_title';
-        $args['sort_order'] = 'ASC';
-        //get the pages
-        $posts = get_pages( $args );
+    foreach($field['page_template'] as $page_template ){
+      $template_name = $template_name_by_file[$page_template];
+      // get pages
+      $args['meta_value'] = $page_template;
+      $pages = get_pages($args);
 
-        if($posts)
-        {
-          foreach( $posts as $post )
-          {
-            // find title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
-            $title = '';
-            $ancestors = get_ancestors( $post->ID, $post->post_type );
-            if($ancestors)
-            {
-              foreach($ancestors as $a)
-              {
-                $title .= '–';
-              }
+      if($pages) {
+        foreach($pages as $post) {
+          // find page title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
+          $title = '';
+          $ancestors = get_ancestors( $post->ID, $post->post_type );
+          if($ancestors) {
+            foreach($ancestors as $a) {
+              $title .= '–';
             }
-            $title .= ' ' . apply_filters( 'the_title', $post->post_title, $post->ID );
-            
-            
-            // status
-            if($post->post_status != "publish")
-            {
-              $title .= " ($post->post_status)";
-            }
-            
-            // WPML
-            if( defined('ICL_LANGUAGE_CODE') )
-            {
-              $title .= ' (' . ICL_LANGUAGE_CODE . ')';
-            }
-            
-            // add to choices
-            $field['choices'][ $post->ID ] = $title;
-            
           }
-          // foreach( $posts as $post )
+          $title .= ' ' . apply_filters( 'the_title', $post->post_title, $post->ID );
+          // status
+          if($post->post_status != "publish") {
+            $title .= " ($post->post_status)";
+          }
+          // WPML
+          if( defined('ICL_LANGUAGE_CODE') ) {
+            $title .= ' (' . ICL_LANGUAGE_CODE . ')';
+          }
+          // add to choices
+          $field['choices'][$template_name][ $post->ID ] = $title;
         }
-        // if($posts)
-      }
-      // foreach( $field['page_template'] as $page_template )
-    }
-    //if page_template
-    
-    
-    // create field
-    // $this->parent->create_field( $field );
+        // foreach( $posts as $post )
+      } // if($posts)
+    } // foreach( $field['page_template'] as $page_template )
 
-    
-    // perhaps use $field['preview_size'] to alter the markup?
-    
-    
+    $field['type'] = 'select';
     // create Field HTML
-    ?>
-    <div>
-        <?php 
-        do_action('acf/create_field', array(
-          'type' => 'select',
-          'name' => 'fields['.$key.'][multiple]',
-          'value' => $field['multiple'],
-          'choices' => array(
-            '1' => __("Yes",'acf'),
-            '0' => __("No",'acf'),
-          ),
-          'layout' => 'horizontal',
-        ));
-        ?>
-    </div>
-    <?php
+    do_action('acf/create_field', $field);
   }
   
   
