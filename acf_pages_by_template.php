@@ -4,12 +4,12 @@
 Plugin Name: Advanced Custom Fields: Pages by template
 Plugin URI: https://github.com/jonathan-dejong/acf-pages-by-template
 description: Adds a field to select a page, filtered on pages of a specific template
-Version: 1.0.0
+Version: 2.0.0
 Author: Jonathan de Jong, Xavier Priour
+Author URI: tigerton.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
-
 
 // 1. set text domain
 // Reference: https://codex.wordpress.org/Function_Reference/load_plugin_textdomain

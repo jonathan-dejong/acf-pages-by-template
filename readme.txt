@@ -1,8 +1,8 @@
 === Advanced Custom Fields: Pages by template Field ===
-Contributors: Jonathan de Jong, Xavier Priour
+Contributors: jonathandejong, Xavier Priour
 Tags: ACF, page, template
 Requires at least: 3.5
-Tested up to: 3.8.1
+Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,7 @@ The return value is one or more post objects. Display these in the same way you 
 = Compatibility =
 
 This ACF field type is compatible with:
+____
 * ACF 4
 
 == Installation ==
