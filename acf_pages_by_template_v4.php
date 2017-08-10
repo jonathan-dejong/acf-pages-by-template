@@ -196,7 +196,7 @@ class acf_field_acf_pages_by_template extends acf_field {
   {
     // Note: This function can be removed if not used
     
-    
+    /*
     // register ACF scripts
     wp_register_script( 'acf-input-acf_pages_by_template', $this->settings['dir'] . 'js/input.js', array('acf-input'), $this->settings['version'] );
     wp_register_style( 'acf-input-acf_pages_by_template', $this->settings['dir'] . 'css/input.css', array('acf-input'), $this->settings['version'] ); 
@@ -211,7 +211,7 @@ class acf_field_acf_pages_by_template extends acf_field {
     wp_enqueue_style(array(
       'acf-input-acf_pages_by_template',  
     ));
-    
+    */    
     
   }
   
